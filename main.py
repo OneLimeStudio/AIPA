@@ -28,7 +28,7 @@ if os.path.exists(meta_path) and os.path.getsize(meta_path) > 0:
         try:
             file_mod_data = json.load(f)
         except json.JSONDecodeError:
-            print("⚠️ Warning: file_meta.json is invalid, resetting.")
+            print(" Warning: file_meta.json is invalid, resetting.")
             file_mod_data = {}
 
 mypath = os.path.join(os.getcwd(), "files")
@@ -101,7 +101,7 @@ with open(meta_path, "w", encoding="utf-8") as f:
     json.dump(file_mod_data, f, indent=2)
 
 while True:
-    query = input("\n🔍 Ask a question (or type 'exit'): ").strip()
+    query = input("\nAsk a question (or type 'exit'): ").strip()
     if query.lower() == "exit":
         break
 
