@@ -7,13 +7,13 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 
-# ---- Settings ----
+
 model = SentenceTransformer("all-MiniLM-L6-v2")
 embedding_dim = model.get_sentence_embedding_dimension()
 index = faiss.IndexFlatL2(embedding_dim)
 metadata = []
 
-# ---- Config ----
+
 max_lines = 20
 overlap = 5
 max_chars = 1000
@@ -30,7 +30,7 @@ if os.path.exists(meta_path) and os.path.getsize(meta_path) > 0:
         except json.JSONDecodeError:
             print("⚠️ Warning: file_meta.json is invalid, resetting.")
             file_mod_data = {}
-#---- File Path Setup ----
+
 mypath = os.path.join(os.getcwd(), "files")
 files = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
 
@@ -48,7 +48,7 @@ def chunk_paragraphs(text, max_chars=1000, overlap=100):
         chunks.append(buffer.strip())
     return chunks
 
-# ---- Load & Embed Files ----
+
 for file in files:
     full_path = os.path.join(mypath, file)
     last_modify = os.path.getmtime(full_path)
@@ -79,7 +79,7 @@ for file in files:
             chunks = ["\n".join(lines[i:i + max_lines]) for i in range(0, len(lines), max_lines - overlap)]
 
         else:
-            continue  # skip unsupported formats
+            continue  
 
         embeddings = model.encode(chunks, convert_to_numpy=True, show_progress_bar=False)
         index.add(np.array(embeddings))
@@ -99,7 +99,7 @@ for file in files:
 
 with open(meta_path, "w", encoding="utf-8") as f:
     json.dump(file_mod_data, f, indent=2)
-# ---- Search Loop ----
+
 while True:
     query = input("\n🔍 Ask a question (or type 'exit'): ").strip()
     if query.lower() == "exit":
